@@ -1,0 +1,2196 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>ഗണിതം - STD 1 | വരമേളം</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manjari:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Manjari', sans-serif;
+            background-color: #fef3c7;
+            color: #1e293b;
+            overflow-x: hidden;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .app-container {
+            max-width: 820px;
+            width: 100%;
+            margin: 0 auto;
+            min-height: 100vh;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow-x: hidden;
+            padding: 0;
+        }
+        .screen {
+            display: none;
+            padding: 16px;
+            animation: fadeIn 0.3s ease-in-out;
+            overflow-x: hidden;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+        }
+        .screen.active { display: block; }
+        .song-card {
+            background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+            border: 2px solid #f9a8d4;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 14px;
+            overflow: hidden;
+        }
+        .song-card .song-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #1e293b;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            white-space: pre-line;
+        }
+        .read-btn {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #4c1d95;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .read-btn:active { transform: translateY(3px); box-shadow: none; }
+        .read-btn.speaking {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 3px 0 #991b1b;
+        }
+        .zoom-controls {
+            position: fixed;
+            bottom: 80px;
+            right: 12px;
+            z-index: 900;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .zoom-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: #f59e0b;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: bold;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+            cursor: pointer;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .btn-main {
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-weight: bold;
+            font-size: 1.05rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+            width: 100%;
+            color: white;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            text-align: left;
+            overflow: hidden;
+            word-break: break-word;
+        }
+        .btn-main:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+        .btn-action {
+            background-color: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 0 #059669;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-action:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+        .header {
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            color: white;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 18px;
+        }
+        .header h1 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 70%;
+        }
+        .back-btn {
+            background: rgba(255,255,255,0.25);
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+        .category-card {
+            background: #fffbeb;
+            border: 2px solid #fde68a;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+        .category-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 14px;
+            border-bottom: 2px dashed #fbbf24;
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            word-break: break-word;
+        }
+        .content-card {
+            background-color: #ffffff;
+            border: 2px solid #fcd34d;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            overflow-x: hidden;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            max-width: 100%;
+        }
+        .shape-btn, .match-item, .quiz-opt, .color-opt {
+            padding: 14px;
+            background-color: #fef3c7;
+            border: 3px solid #fde68a;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+        }
+        .shape-btn:hover, .quiz-opt:hover, .color-opt:hover { background-color: #fde68a; }
+        .match-item.selected { background-color: #bae6fd; border-color: #0284c7; }
+        .match-item.matched { background-color: #bbf7d0; border-color: #16a34a; color: #16a34a; cursor: default; }
+        
+        .memory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .memory-card {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            color: transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 0 #c2410c;
+        }
+        .memory-card.revealed, .memory-card.matched {
+            background-color: #ffffff;
+            color: #1f2937;
+            border: 3px solid #f59e0b;
+            box-shadow: none;
+        }
+        .memory-card.matched { background-color: #d1fae5; border-color: #059669; }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1e293b;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .toast.show { display: block; opacity: 1; }
+
+        .color-palette {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 12px 0;
+        }
+        .color-swatch {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+        .color-swatch:hover, .color-swatch.active {
+            transform: scale(1.2);
+            border-color: #1e293b;
+        }
+
+        .trace-canvas {
+            border: 3px dashed #fbbf24;
+            border-radius: 12px;
+            background: #fffbeb;
+            touch-action: none;
+            cursor: crosshair;
+            width: 100%;
+            display: block;
+        }
+
+        .pattern-cell {
+            width: 48px;
+            height: 48px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            background: white;
+            cursor: pointer;
+        }
+        .pattern-cell.empty {
+            border: 2px dashed #f59e0b;
+            background: #fef3c7;
+        }
+
+        input.game-input {
+            width: 100%;
+            padding: 12px;
+            border: 3px solid #fde68a;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: #fffbeb;
+        }
+        input.game-input:focus { outline: none; border-color: #f59e0b; }
+
+        .song-box {
+            background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+            border-radius: 14px;
+            padding: 16px;
+            margin: 12px 0;
+            border: 2px solid #f9a8d4;
+        }
+
+        .count-box {
+            background: #fef3c7;
+            border: 3px solid #fbbf24;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hidden-answer {
+            display: none;
+            background: #ecfdf5;
+            border: 2px solid #6ee7b7;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+        .hidden-answer.show { display: block; }
+
+        @media print {
+            .no-print { display: none !important; }
+            .screen { display: block !important; padding: 0; }
+            .header { display: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+
+    <!-- ==================== HOME SCREEN ==================== -->
+    <div id="homeScreen" class="screen active">
+        <div class="text-center mb-5 pt-3">
+            <h1 class="text-3xl font-bold text-amber-700 mb-1">ഗണിതം - STD 1</h1>
+            <p class="text-amber-600 font-bold text-lg mb-1">യൂണിറ്റ് 1 : വരമേളം</p>
+            <p class="text-sm text-amber-500">ആകൃതികളും വരകളും</p>
+        </div>
+
+        <!-- 1. Learn -->
+        <div class="category-card border-orange-200">
+            <h3 class="category-title text-orange-800">📐 1. പഠിക്കാം</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <button class="btn-main bg-orange-500" onclick="showScreen('learnScreen')">
+                    <span class="text-2xl">📖</span> ആകൃതികൾ പഠിക്കാം
+                </button>
+                <button class="btn-main bg-amber-500" onclick="showScreen('songScreen')">
+                    <span class="text-2xl">🎵</span> ദോശ പാട്ട്
+                </button>
+                <button class="btn-main bg-yellow-500" onclick="showScreen('linesScreen')">
+                    <span class="text-2xl">📏</span> വരകൾ പഠിക്കാം
+                </button>
+                <button class="btn-main bg-rose-600" onclick="showScreen('singAlongScreen')">
+                    <span class="text-2xl">🎤</span> വരികൾ ചേർത്ത് പാടൂ
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. Colour -->
+        <div class="category-card border-pink-200">
+            <h3 class="category-title text-pink-800">🎨 2. നിറം കൊടുക്കാം</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <button class="btn-main bg-pink-500" onclick="initColorShapes(); showScreen('colorShapesScreen')">
+                    <span class="text-2xl">🏠</span> വീടും ബോട്ടും
+                </button>
+                <button class="btn-main bg-rose-500" onclick="initColorTrain(); showScreen('colorTrainScreen')">
+                    <span class="text-2xl">🚂</span> ട്രെയിൻ നിറം
+                </button>
+                <button class="btn-main bg-fuchsia-500" onclick="initColorAnimals(); showScreen('colorAnimalsScreen')">
+                    <span class="text-2xl">🐦</span> പക്ഷിയും കുറുക്കനും
+                </button>
+                <button class="btn-main bg-purple-500" onclick="initColorVehicles(); showScreen('colorVehiclesScreen')">
+                    <span class="text-2xl">🚌</span> വാഹനങ്ങൾ
+                </button>
+                <button class="btn-main bg-red-500" onclick="initColorFlower(); showScreen('colorFlowerScreen')">
+                    <span class="text-2xl">🌸</span> പൂവ് നിറം
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. Draw & Trace -->
+        <div class="category-card border-blue-200">
+            <h3 class="category-title text-blue-800">✏️ 3. വരയ്ക്കാം</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <button class="btn-main bg-blue-500" onclick="initTrace(); showScreen('traceScreen')">
+                    <span class="text-2xl">🖊️</span> ആകൃതി വരയ്ക്കാം
+                </button>
+                <button class="btn-main bg-sky-500" onclick="initFishDraw(); showScreen('fishScreen')">
+                    <span class="text-2xl">🐟</span> മത്സ്യം ഉണ്ടാക്കാം
+                </button>
+                <button class="btn-main bg-cyan-500" onclick="initRobot(); showScreen('robotScreen')">
+                    <span class="text-2xl">🤖</span> റോബോട്ട് വരയ്ക്കാം
+                </button>
+                <button class="btn-main bg-indigo-500" onclick="initDog(); showScreen('dogScreen')">
+                    <span class="text-2xl">🐶</span> നായയെ പൂർത്തിയാക്കാം
+                </button>
+                <button class="btn-main bg-blue-600" onclick="initTree(); showScreen('treeScreen')">
+                    <span class="text-2xl">🎄</span> മരം വരയ്ക്കാം
+                </button>
+            </div>
+        </div>
+
+        <!-- 4. Patterns & Match -->
+        <div class="category-card border-green-200">
+            <h3 class="category-title text-green-800">🧩 4. പാറ്റേണും മാച്ചും</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <button class="btn-main bg-green-500" onclick="initPattern(); showScreen('patternScreen')">
+                    <span class="text-2xl">🔢</span> പാറ്റേൺ പൂർത്തിയാക്കാം
+                </button>
+                <button class="btn-main bg-emerald-500" onclick="initBeads(); showScreen('beadsScreen')">
+                    <span class="text-2xl">📿</span> മുത്തുമാല
+                </button>
+                <button class="btn-main bg-teal-500" onclick="initMemory(); showScreen('memoryScreen')">
+                    <span class="text-2xl">🃏</span> മെമ്മറി ഗെയിം
+                </button>
+                <button class="btn-main bg-lime-500" onclick="showScreen('matchScreen')">
+                    <span class="text-2xl">🔄</span> ആകൃതി മാച്ച്
+                </button>
+                <button class="btn-main bg-green-600" onclick="initCount(); showScreen('countScreen')">
+                    <span class="text-2xl">🔢</span> ആകൃതി എണ്ണാം
+                </button>
+            </div>
+        </div>
+
+        <!-- 5. Identify & Quiz -->
+        <div class="category-card border-violet-200">
+            <h3 class="category-title text-violet-800">❓ 5. തിരിച്ചറിയാം</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <button class="btn-main bg-violet-500" onclick="initIdentify(); showScreen('identifyScreen')">
+                    <span class="text-2xl">🔍</span> ആകൃതി കണ്ടെത്താം
+                </button>
+                <button class="btn-main bg-purple-600" onclick="initQuiz(); showScreen('quizScreen')">
+                    <span class="text-2xl">🧠</span> മെഗാ ക്വിസ്
+                </button>
+                <button class="btn-main bg-fuchsia-600" onclick="showScreen('objectsScreen')">
+                    <span class="text-2xl">📦</span> വസ്തുക്കളിലെ ആകൃതി
+                </button>
+                <button class="btn-main bg-pink-600" onclick="initSort(); showScreen('sortScreen')">
+                    <span class="text-2xl">🗂️</span> ആകൃതി തരംതിരിക്കാം
+                </button>
+            </div>
+        </div>
+
+        <!-- 6. Assessment -->
+        <div class="category-card border-emerald-200">
+            <h3 class="category-title text-emerald-800">📝 6. പരീക്ഷാ കോർണർ</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <button class="btn-main bg-teal-500" onclick="showScreen('modelQPScreen')">
+                    <span class="text-2xl">📋</span> മോഡൽ ചോദ്യപേപ്പർ
+                </button>
+                <button class="btn-main bg-emerald-500" onclick="showScreen('lessonQPScreen')">
+                    <span class="text-2xl">📄</span> ലെസൻ ചോദ്യപേപ്പർ
+                </button>
+                <button class="btn-main bg-green-500" onclick="showScreen('unitTestScreen')">
+                    <span class="text-2xl">📑</span> യൂണിറ്റ് ടെസ്റ്റ്
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== LEARN SCREEN ==================== -->
+    <div id="learnScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>ആകൃതികൾ പഠിക്കാം</h1>
+        </div>
+        <div class="content-card">
+            <h3 class="text-xl font-bold text-orange-700 mb-3 text-center">പ്രധാന ആകൃതികൾ</h3>
+            <div class="grid grid-cols-1 gap-4">
+                <div class="bg-red-50 border-2 border-red-200 rounded-xl p-4 text-center">
+                    <div class="text-6xl mb-2">🔴</div>
+                    <h4 class="text-lg font-bold text-red-700">വൃത്തം (Circle)</h4>
+                    <p class="text-sm text-gray-600 mt-1">വട്ടത്തിലുള്ള ആകൃതി. മൂലകളോ വശങ്ങളോ ഇല്ല.</p>
+                    <p class="text-xs text-gray-500 mt-1">ഉദാ: പന്ത്, സൂര്യൻ, പ്ലേറ്റ്, ചക്രം, ദോശ</p>
+                </div>
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 text-center">
+                    <div class="text-6xl mb-2">🟦</div>
+                    <h4 class="text-lg font-bold text-blue-700">സമചതുരം (Square)</h4>
+                    <p class="text-sm text-gray-600 mt-1">4 വശങ്ങൾ, 4 മൂലകൾ. എല്ലാ വശങ്ങളും തുല്യം.</p>
+                    <p class="text-xs text-gray-500 mt-1">ഉദാ: ജനൽ, ബോക്സ്, ടൈൽ</p>
+                </div>
+                <div class="bg-green-50 border-2 border-green-200 rounded-xl p-4 text-center">
+                    <div class="text-6xl mb-2">🔺</div>
+                    <h4 class="text-lg font-bold text-green-700">ത്രികോണം (Triangle)</h4>
+                    <p class="text-sm text-gray-600 mt-1">3 വശങ്ങൾ, 3 മൂലകൾ.</p>
+                    <p class="text-xs text-gray-500 mt-1">ഉദാ: പർവതം, പതാക, പിസ്സ സ്ലൈസ്</p>
+                </div>
+                <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4 text-center">
+                    <div class="text-6xl mb-2">▬</div>
+                    <h4 class="text-lg font-bold text-yellow-700">ദീർഘചതുരം (Rectangle)</h4>
+                    <p class="text-sm text-gray-600 mt-1">4 വശങ്ങൾ. എതിർ വശങ്ങൾ തുല്യം.</p>
+                    <p class="text-xs text-gray-500 mt-1">ഉദാ: പുസ്തകം, ഡോർ, മൊബൈൽ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SONG SCREEN (DOSA) ==================== -->
+    <div id="songScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>ദോശ പാട്ട്</h1>
+        </div>
+        <div class="content-card">
+            <div class="song-box text-center">
+                <p class="text-lg font-bold text-pink-700 mb-3">🎵 അച്ചൻ ചുട്ട ദോശ 🎵</p>
+                <p class="leading-relaxed text-gray-800 text-base" id="songTextDosa">
+                    ദോശ നല്ല ദോശ<br>
+                    ശീ...ശൂ... ദോശ<br>
+                    വട്ടം വട്ടം ദോശ<br>
+                    ആഹാ നല്ല ദോശ<br>
+                    അച്ചൻ ചുട്ട ദോശ<br>
+                    അമ്മ വിളമ്പിയ ദോശ<br>
+                    കുഞ്ഞു കുഞ്ഞു ദോശ
+                </p>
+                <button class="read-btn" onclick="speakMalayalam('songTextDosa', this)">🔊 വായിക്കുക</button>
+            </div>
+            <div class="bg-amber-50 border-2 border-amber-200 rounded-xl p-4 mt-4 text-center">
+                <p class="font-bold text-amber-800 mb-2">ദോശയുടെ ആകൃതി എന്താണ്?</p>
+                <div class="text-5xl my-3">🫓</div>
+                <p class="text-lg font-bold text-orange-600">വൃത്തം! 🔴</p>
+            </div>
+            <div class="song-box mt-4" style="background: linear-gradient(135deg,#dbeafe,#bfdbfe); border-color:#93c5fd;">
+                <p class="text-lg font-bold text-blue-700 mb-3">🎵 വട്ടത്തിൽ വട്ടത്തിൽ 🎵</p>
+                <p class="leading-relaxed text-gray-800" id="songTextVattam">
+                    വട്ടത്തിൽ വട്ടത്തിൽ എന്തുണ്ട്?<br>
+                    വട്ടത്തിൽ വട്ടത്തിൽ ദോശയുണ്ട്<br>
+                    വട്ടത്തിൽ വട്ടത്തിൽ എന്തുണ്ട്?<br>
+                    വട്ടത്തിൽ വട്ടത്തിൽ വളയുണ്ട്<br><br>
+                    ചതുരത്തിൽ ചതുരത്തിൽ എന്തുണ്ട്?<br>
+                    ചതുരത്തിൽ ചതുരത്തിൽ പെട്ടിയുണ്ട്
+                </p>
+                <button class="read-btn" onclick="speakMalayalam('songTextVattam', this)">🔊 വായിക്കുക</button>
+            </div>
+            <p class="text-center text-sm text-gray-500 mt-4">ടീച്ചറോടൊപ്പം പാടി ആകൃതികൾ ഓർക്കാം!</p>
+        </div>
+    </div>
+
+    <!-- ==================== LINES SCREEN ==================== -->
+    <div id="linesScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>വരകൾ പഠിക്കാം</h1>
+        </div>
+        <div class="content-card">
+            <div class="grid gap-4">
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 text-center">
+                    <p class="font-bold text-blue-800 mb-2">നേർവര (Straight Line)</p>
+                    <div class="text-4xl my-2">────────</div>
+                    <p class="text-sm text-gray-600">നേരെയുള്ള വര</p>
+                </div>
+                <div class="bg-green-50 border-2 border-green-200 rounded-xl p-4 text-center">
+                    <p class="font-bold text-green-800 mb-2">വളവ് വര (Curved Line)</p>
+                    <div class="text-4xl my-2">〜〜〜〜〜</div>
+                    <p class="text-sm text-gray-600">വളഞ്ഞ വര</p>
+                </div>
+                <div class="bg-purple-50 border-2 border-purple-200 rounded-xl p-4 text-center">
+                    <p class="font-bold text-purple-800 mb-2">ചുറ്റുവര (Closed Shape)</p>
+                    <div class="text-4xl my-2">○ □ △</div>
+                    <p class="text-sm text-gray-600">ആരംഭവും അവസാനവും കൂടിച്ചേരുന്ന വര</p>
+                </div>
+            </div>
+            <p class="text-center text-sm text-gray-500 mt-4">വരകൾ ചേർത്താണ് ആകൃതികൾ ഉണ്ടാകുന്നത്!</p>
+        </div>
+    </div>
+
+    <!-- ==================== SING ALONG (വരികൾ ചേർത്ത് പാടൂ) ==================== -->
+    <div id="singAlongScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="stopSpeaking(); showScreen('homeScreen')">⬅ Home</button>
+            <h1>വരികൾ ചേർത്ത് പാടൂ</h1>
+        </div>
+        <div class="content-card">
+            <p class="text-center font-bold text-gray-700 mb-4">ബുക്കിലെ ചിത്രങ്ങൾ നോക്കി പാടൂ. ഓരോ പാട്ടും ശ്രദ്ധിച്ച് കേൾക്കൂ!</p>
+
+            <!-- Song 1: Dosa -->
+            <div class="song-card">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-4xl">🫓</span>
+                    <span class="font-bold text-pink-800 text-lg">ദോശ</span>
+                </div>
+                <p class="song-text" id="songText1">വട്ടത്തിൽ വട്ടത്തിൽ എന്തുണ്ട്?
+വട്ടത്തിൽ വട്ടത്തിൽ ദോശയുണ്ട്
+വട്ടത്തിൽ വട്ടത്തിൽ എന്തുണ്ട്?
+വട്ടത്തിൽ വട്ടത്തിൽ ദോശയുണ്ട്</p>
+                <button class="read-btn" id="readBtn1" onclick="speakMalayalam('songText1', this)">🔊 വായിക്കുക</button>
+            </div>
+
+            <!-- Song 2: Ring / Vala -->
+            <div class="song-card" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe);border-color:#93c5fd;">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-4xl">💍</span>
+                    <span class="font-bold text-blue-800 text-lg">വള</span>
+                </div>
+                <p class="song-text" id="songText2">വട്ടത്തിൽ വട്ടത്തിൽ എന്തുണ്ട്?
+വട്ടത്തിൽ വട്ടത്തിൽ വളയുണ്ട്
+വട്ടത്തിൽ വട്ടത്തിൽ എന്തുണ്ട്?
+വട്ടത്തിൽ വട്ടത്തിൽ വളയുണ്ട്</p>
+                <button class="read-btn" id="readBtn2" onclick="speakMalayalam('songText2', this)">🔊 വായിക്കുക</button>
+            </div>
+
+            <!-- Song 3: Plate -->
+            <div class="song-card" style="background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#fbbf24;">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-4xl">🍽️</span>
+                    <span class="font-bold text-amber-800 text-lg">പ്ലേറ്റ്</span>
+                </div>
+                <p class="song-text" id="songText3">വട്ടത്തിൽ വട്ടത്തിൽ എന്തുണ്ട്?
+വട്ടത്തിൽ വട്ടത്തിൽ പ്ലേറ്റുണ്ട്
+വട്ടത്തിൽ വട്ടത്തിൽ എന്തുണ്ട്?
+വട്ടത്തിൽ വട്ടത്തിൽ പ്ലേറ്റുണ്ട്</p>
+                <button class="read-btn" id="readBtn3" onclick="speakMalayalam('songText3', this)">🔊 വായിക്കുക</button>
+            </div>
+
+            <!-- Song 4: Wheel -->
+            <div class="song-card" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0);border-color:#6ee7b7;">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-4xl">🛞</span>
+                    <span class="font-bold text-green-800 text-lg">ചക്രം</span>
+                </div>
+                <p class="song-text" id="songText4">വട്ടത്തിൽ വട്ടത്തിൽ എന്തുണ്ട്?
+വട്ടത്തിൽ വട്ടത്തിൽ ചക്രമുണ്ട്
+വട്ടത്തിൽ വട്ടത്തിൽ എന്തുണ്ട്?
+വട്ടത്തിൽ വട്ടത്തിൽ ചക്രമുണ്ട്</p>
+                <button class="read-btn" id="readBtn4" onclick="speakMalayalam('songText4', this)">🔊 വായിക്കുക</button>
+            </div>
+
+            <!-- Song 5: Clock -->
+            <div class="song-card" style="background:linear-gradient(135deg,#e0e7ff,#c7d2fe);border-color:#a5b4fc;">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-4xl">🕐</span>
+                    <span class="font-bold text-indigo-800 text-lg">ഘടികാരം</span>
+                </div>
+                <p class="song-text" id="songText5">വട്ടത്തിൽ വട്ടത്തിൽ എന്തുണ്ട്?
+വട്ടത്തിൽ വട്ടത്തിൽ ഘടികാരമുണ്ട്
+വട്ടത്തിൽ വട്ടത്തിൽ എന്തുണ്ട്?
+വട്ടത്തിൽ വട്ടത്തിൽ ഘടികാരമുണ്ട്</p>
+                <button class="read-btn" id="readBtn5" onclick="speakMalayalam('songText5', this)">🔊 വായിക്കുക</button>
+            </div>
+
+            <!-- Song 6: Box / Petti -->
+            <div class="song-card" style="background:linear-gradient(135deg,#fce7f3,#f9a8d4);border-color:#f472b6;">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-4xl">📦</span>
+                    <span class="font-bold text-pink-800 text-lg">പെട്ടി</span>
+                </div>
+                <p class="song-text" id="songText6">ചതുരത്തിൽ ചതുരത്തിൽ എന്തുണ്ട്?
+ചതുരത്തിൽ ചതുരത്തിൽ പെട്ടിയുണ്ട്
+ചതുരത്തിൽ ചതുരത്തിൽ എന്തുണ്ട്?
+ചതുരത്തിൽ ചതുരത്തിൽ പെട്ടിയുണ്ട്</p>
+                <button class="read-btn" id="readBtn6" onclick="speakMalayalam('songText6', this)">🔊 വായിക്കുക</button>
+            </div>
+
+            <!-- Song 7: Book -->
+            <div class="song-card" style="background:linear-gradient(135deg,#ffedd5,#fed7aa);border-color:#fdba74;">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-4xl">📖</span>
+                    <span class="font-bold text-orange-800 text-lg">പുസ്തകം</span>
+                </div>
+                <p class="song-text" id="songText7">ചതുരത്തിൽ ചതുരത്തിൽ എന്തുണ്ട്?
+ചതുരത്തിൽ ചതുരത്തിൽ പുസ്തകമുണ്ട്
+ചതുരത്തിൽ ചതുരത്തിൽ എന്തുണ്ട്?
+ചതുരത്തിൽ ചതുരത്തിൽ പുസ്തകമുണ്ട്</p>
+                <button class="read-btn" id="readBtn7" onclick="speakMalayalam('songText7', this)">🔊 വായിക്കുക</button>
+            </div>
+
+            <!-- Song 8: Mobile -->
+            <div class="song-card" style="background:linear-gradient(135deg,#ecfdf5,#bbf7d0);border-color:#86efac;">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-4xl">📱</span>
+                    <span class="font-bold text-emerald-800 text-lg">മൊബൈൽ</span>
+                </div>
+                <p class="song-text" id="songText8">ചതുരത്തിൽ ചതുരത്തിൽ എന്തുണ്ട്?
+ചതുരത്തിൽ ചതുരത്തിൽ മൊബൈലുണ്ട്
+ചതുരത്തിൽ ചതുരത്തിൽ എന്തുണ്ട്?
+ചതുരത്തിൽ ചതുരത്തിൽ മൊബൈലുണ്ട്</p>
+                <button class="read-btn" id="readBtn8" onclick="speakMalayalam('songText8', this)">🔊 വായിക്കുക</button>
+            </div>
+
+            <!-- Song 9: Matchbox -->
+            <div class="song-card" style="background:linear-gradient(135deg,#fef9c3,#fef08a);border-color:#fde047;">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-4xl">📦</span>
+                    <span class="font-bold text-yellow-800 text-lg">തീപ്പെട്ടി</span>
+                </div>
+                <p class="song-text" id="songText9">ചതുരത്തിൽ ചതുരത്തിൽ എന്തുണ്ട്?
+ചതുരത്തിൽ ചതുരത്തിൽ തീപ്പെട്ടിയുണ്ട്
+ചതുരത്തിൽ ചതുരത്തിൽ എന്തുണ്ട്?
+ചതുരത്തിൽ ചതുരത്തിൽ തീപ്പെട്ടിയുണ്ട്</p>
+                <button class="read-btn" id="readBtn9" onclick="speakMalayalam('songText9', this)">🔊 വായിക്കുക</button>
+            </div>
+
+            <!-- Song 10: Biscuit -->
+            <div class="song-card" style="background:linear-gradient(135deg,#f5f3ff,#ddd6fe);border-color:#c4b5fd;">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-4xl">🍪</span>
+                    <span class="font-bold text-violet-800 text-lg">ബിസ്ക്കറ്റ്</span>
+                </div>
+                <p class="song-text" id="songText10">ചതുരത്തിൽ ചതുരത്തിൽ എന്തുണ്ട്?
+ചതുരത്തിൽ ചതുരത്തിൽ ബിസ്ക്കറ്റുണ്ട്
+ചതുരത്തിൽ ചതുരത്തിൽ എന്തുണ്ട്?
+ചതുരത്തിൽ ചതുരത്തിൽ ബിസ്ക്കറ്റുണ്ട്</p>
+                <button class="read-btn" id="readBtn10" onclick="speakMalayalam('songText10', this)">🔊 വായിക്കുക</button>
+            </div>
+
+            <!-- Full song together -->
+            <div class="song-card" style="background:linear-gradient(135deg,#fce7f3,#ddd6fe);border-color:#e879f9;">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-4xl">🎵</span>
+                    <span class="font-bold text-fuchsia-800 text-lg">മുഴുവൻ പാട്ട്</span>
+                </div>
+                <p class="song-text" id="songTextFull">വട്ടത്തിൽ വട്ടത്തിൽ എന്തുണ്ട്?
+വട്ടത്തിൽ വട്ടത്തിൽ ദോശയുണ്ട്
+വട്ടത്തിൽ വട്ടത്തിൽ വളയുണ്ട്
+വട്ടത്തിൽ വട്ടത്തിൽ പ്ലേറ്റുണ്ട്
+വട്ടത്തിൽ വട്ടത്തിൽ ചക്രമുണ്ട്
+ചതുരത്തിൽ ചതുരത്തിൽ എന്തുണ്ട്?
+ചതുരത്തിൽ ചതുരത്തിൽ പെട്ടിയുണ്ട്
+ചതുരത്തിൽ ചതുരത്തിൽ പുസ്തകമുണ്ട്
+ചതുരത്തിൽ ചതുരത്തിൽ മൊബൈലുണ്ട്</p>
+                <button class="read-btn" id="readBtnFull" onclick="speakMalayalam('songTextFull', this)">🔊 മുഴുവൻ വായിക്കുക</button>
+            </div>
+
+            <button class="btn-action w-full mt-2" onclick="stopSpeaking()">⏹ നിർത്തുക</button>
+        </div>
+    </div>
+
+    <!-- ==================== COLOR SHAPES ==================== -->
+    <div id="colorShapesScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>വീടും ബോട്ടും</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-3">നിറം തിരഞ്ഞെടുത്ത് ആകൃതികൾക്ക് നിറം കൊടുക്കൂ!</p>
+            <div class="color-palette" id="colorPalette1"></div>
+            <div class="flex flex-wrap justify-center gap-6 my-6">
+                <div class="relative" style="width:180px; height:140px;">
+                    <svg viewBox="0 0 180 140" class="w-full h-full">
+                        <polygon points="90,10 140,70 40,70" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></polygon>
+                        <rect x="50" y="70" width="80" height="40" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                        <circle cx="150" cy="90" r="12" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                        <line x1="90" y1="10" x2="90" y2="40" stroke="#333" stroke-width="2"/>
+                        <polygon points="90,15 110,30 90,30" fill="#ef4444"/>
+                    </svg>
+                    <p class="text-sm font-bold mt-1">ബോട്ട്</p>
+                </div>
+                <div class="relative" style="width:160px; height:150px;">
+                    <svg viewBox="0 0 160 150" class="w-full h-full">
+                        <polygon points="80,15 140,70 20,70" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></polygon>
+                        <rect x="30" y="70" width="100" height="60" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                        <rect x="65" y="95" width="30" height="35" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                        <circle cx="30" cy="40" r="15" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                    </svg>
+                    <p class="text-sm font-bold mt-1">വീട്</p>
+                </div>
+            </div>
+            <button class="btn-action w-full" onclick="resetColors('colorShapesScreen')">Reset നിറങ്ങൾ</button>
+        </div>
+    </div>
+
+    <!-- ==================== COLOR TRAIN ==================== -->
+    <div id="colorTrainScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>ട്രെയിൻ നിറം</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-2">മുകളിലെ ആകൃതികളുടെ നിറം നോക്കി ട്രെയിനിന് നിറം കൊടുക്കൂ</p>
+            <div class="flex justify-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-green-500 rounded border-2 border-gray-700"></div>
+                <div class="w-0 h-0 border-l-[24px] border-r-[24px] border-b-[42px] border-l-transparent border-r-transparent border-b-yellow-400"></div>
+                <div class="w-12 h-12 bg-purple-500 rounded-full border-2 border-gray-700"></div>
+            </div>
+            <div class="color-palette" id="colorPalette2"></div>
+            <svg viewBox="0 0 320 160" class="w-full max-w-md mx-auto my-4">
+                <rect x="180" y="50" width="90" height="60" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <rect x="200" y="60" width="30" height="25" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <rect x="250" y="30" width="40" height="30" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <polygon points="50,70 70,30 90,70" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></polygon>
+                <polygon points="100,70 120,30 140,70" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></polygon>
+                <rect x="40" y="70" width="140" height="50" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <circle cx="70" cy="130" r="18" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <circle cx="130" cy="130" r="18" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <circle cx="210" cy="130" r="18" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <circle cx="260" cy="130" r="18" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+            </svg>
+            <button class="btn-action w-full" onclick="resetColors('colorTrainScreen')">Reset നിറങ്ങൾ</button>
+        </div>
+    </div>
+
+    <!-- ==================== COLOR ANIMALS ==================== -->
+    <div id="colorAnimalsScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>പക്ഷിയും കുറുക്കനും</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-3">ആകൃതികൾക്ക് നിറം കൊടുത്ത് മനോഹരമാക്കൂ!</p>
+            <div class="color-palette" id="colorPalette3"></div>
+            <div class="flex flex-wrap justify-center gap-8 my-4">
+                <div>
+                    <svg viewBox="0 0 160 140" width="160" height="140">
+                        <circle cx="70" cy="60" r="35" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                        <circle cx="55" cy="50" r="18" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                        <circle cx="50" cy="48" r="4" fill="#333"/>
+                        <polygon points="30,50 10,45 30,60" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></polygon>
+                        <polygon points="100,50 145,30 145,70" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></polygon>
+                        <line x1="60" y1="95" x2="55" y2="115" stroke="#333" stroke-width="3"/>
+                        <line x1="75" y1="95" x2="80" y2="115" stroke="#333" stroke-width="3"/>
+                    </svg>
+                    <p class="text-sm font-bold">പക്ഷി</p>
+                </div>
+                <div>
+                    <svg viewBox="0 0 160 160" width="160" height="160">
+                        <polygon points="80,20 40,60 50,90 80,100 110,90 120,60" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></polygon>
+                        <polygon points="40,60 20,40 50,55" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></polygon>
+                        <polygon points="120,60 140,40 110,55" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></polygon>
+                        <circle cx="65" cy="65" r="5" fill="#333"/>
+                        <circle cx="95" cy="65" r="5" fill="#333"/>
+                        <polygon points="80,75 70,85 90,85" fill="#333"/>
+                        <polygon points="100,100 140,120 110,140 80,110" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></polygon>
+                    </svg>
+                    <p class="text-sm font-bold">കുറുക്കൻ</p>
+                </div>
+            </div>
+            <button class="btn-action w-full" onclick="resetColors('colorAnimalsScreen')">Reset നിറങ്ങൾ</button>
+        </div>
+    </div>
+
+    <!-- ==================== COLOR VEHICLES ==================== -->
+    <div id="colorVehiclesScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>വാഹനങ്ങൾ</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-3">ട്രക്കും ബസ്സും നിറം കൊടുക്കൂ!</p>
+            <div class="color-palette" id="colorPalette4"></div>
+            <svg viewBox="0 0 300 120" class="w-full max-w-sm mx-auto my-3">
+                <rect x="20" y="40" width="80" height="40" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <rect x="100" y="50" width="60" height="30" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <polygon points="160,50 190,30 190,50" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></polygon>
+                <polygon points="20,40 50,20 50,40" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></polygon>
+                <circle cx="50" cy="90" r="15" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <circle cx="130" cy="90" r="15" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+            </svg>
+            <p class="text-sm font-bold mb-4">ട്രക്ക്</p>
+            <svg viewBox="0 0 300 130" class="w-full max-w-sm mx-auto">
+                <rect x="30" y="30" width="200" height="60" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <rect x="40" y="40" width="25" height="20" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:1.5; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <rect x="75" y="40" width="25" height="20" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:1.5; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <rect x="110" y="40" width="25" height="20" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:1.5; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <rect x="145" y="40" width="25" height="20" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:1.5; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <polygon points="230,30 260,50 230,50" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></polygon>
+                <circle cx="70" cy="105" r="16" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <circle cx="180" cy="105" r="16" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+            </svg>
+            <p class="text-sm font-bold mb-3">ബസ്</p>
+            <button class="btn-action w-full" onclick="resetColors('colorVehiclesScreen')">Reset നിറങ്ങൾ</button>
+        </div>
+    </div>
+
+    <!-- ==================== COLOR FLOWER (NEW) ==================== -->
+    <div id="colorFlowerScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>പൂവ് നിറം</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-3">പൂവിന് നിറം കൊടുക്കൂ! (വർക്ക്ഷീറ്റ് 4)</p>
+            <div class="color-palette" id="colorPalette5"></div>
+            <svg viewBox="0 0 200 220" class="w-full max-w-xs mx-auto my-4">
+                <!-- Petals -->
+                <ellipse cx="100" cy="50" rx="20" ry="35" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)" transform="rotate(0 100 100)"/>
+                <ellipse cx="100" cy="50" rx="20" ry="35" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)" transform="rotate(45 100 100)"/>
+                <ellipse cx="100" cy="50" rx="20" ry="35" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)" transform="rotate(90 100 100)"/>
+                <ellipse cx="100" cy="50" rx="20" ry="35" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)" transform="rotate(135 100 100)"/>
+                <ellipse cx="100" cy="50" rx="20" ry="35" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)" transform="rotate(180 100 100)"/>
+                <ellipse cx="100" cy="50" rx="20" ry="35" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)" transform="rotate(225 100 100)"/>
+                <ellipse cx="100" cy="50" rx="20" ry="35" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)" transform="rotate(270 100 100)"/>
+                <ellipse cx="100" cy="50" rx="20" ry="35" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)" transform="rotate(315 100 100)"/>
+                <!-- Center -->
+                <circle cx="100" cy="100" r="22" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <!-- Stem -->
+                <rect x="95" y="122" width="10" height="60" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <!-- Leaves -->
+                <ellipse cx="70" cy="160" rx="25" ry="12" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)" transform="rotate(-30 70 160)"></ellipse>
+                <ellipse cx="130" cy="160" rx="25" ry="12" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)" transform="rotate(30 130 160)"></ellipse>
+            </svg>
+            <button class="btn-action w-full" onclick="resetColors('colorFlowerScreen')">Reset നിറങ്ങൾ</button>
+        </div>
+    </div>
+
+    <!-- ==================== TRACE SCREEN ==================== -->
+    <div id="traceScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>ആകൃതി വരയ്ക്കാം</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-3" id="tracePrompt">വൃത്തം വരയ്ക്കൂ!</p>
+            <div class="color-palette mb-3">
+                <div class="color-swatch" style="background:#ef4444" onclick="setTraceColor('#ef4444')"></div>
+                <div class="color-swatch" style="background:#3b82f6" onclick="setTraceColor('#3b82f6')"></div>
+                <div class="color-swatch" style="background:#22c55e" onclick="setTraceColor('#22c55e')"></div>
+                <div class="color-swatch" style="background:#eab308" onclick="setTraceColor('#eab308')"></div>
+                <div class="color-swatch" style="background:#8b5cf6" onclick="setTraceColor('#8b5cf6')"></div>
+                <div class="color-swatch" style="background:#1e293b" onclick="setTraceColor('#1e293b')"></div>
+            </div>
+            <canvas id="traceCanvas" class="trace-canvas" height="280"></canvas>
+            <div class="flex gap-2 mt-3">
+                <button class="btn-action flex-1" onclick="clearTrace()">മായ്ക്കുക</button>
+                <button class="bg-blue-500 text-white font-bold px-4 py-3 rounded-xl" onclick="nextTraceShape()">Next ആകൃതി ⏭️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== FISH DRAW (FIXED) ==================== -->
+    <div id="fishScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>മത്സ്യം ഉണ്ടാക്കാം</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-3">ത്രികോണങ്ങൾ ചേർത്ത് മത്സ്യം ഉണ്ടാക്കൂ! (ബുക്ക് പേജ് 13)</p>
+            <div class="grid grid-cols-2 gap-3 max-w-xs mx-auto mb-4">
+                <div class="border-2 border-dashed border-amber-300 rounded-xl p-4 bg-amber-50">
+                    <div class="text-4xl">△</div>
+                    <p class="text-xs mt-1">1 ത്രികോണം</p>
+                </div>
+                <div class="border-2 border-dashed border-amber-300 rounded-xl p-4 bg-amber-50">
+                    <div class="text-4xl">▷◁</div>
+                    <p class="text-xs mt-1">2 ത്രികോണം</p>
+                </div>
+                <div class="border-2 border-dashed border-amber-300 rounded-xl p-4 bg-amber-50">
+                    <div class="text-4xl">🐟</div>
+                    <p class="text-xs mt-1">മത്സ്യം!</p>
+                </div>
+                <div class="border-2 border-dashed border-amber-300 rounded-xl p-4 bg-amber-50">
+                    <div class="text-4xl">🐠</div>
+                    <p class="text-xs mt-1">കൂടുതൽ!</p>
+                </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-3">താഴെ വരച്ച് മത്സ്യം ഉണ്ടാക്കൂ</p>
+            <canvas id="fishCanvas" class="trace-canvas" height="220"></canvas>
+            <div class="flex gap-2 mt-3">
+                <button class="btn-action flex-1" onclick="clearFish()">മായ്ക്കുക</button>
+                <button class="bg-sky-500 text-white font-bold px-4 py-3 rounded-xl" onclick="showToast('നല്ല മത്സ്യം! 🐟🎉')">കഴിഞ്ഞു!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== ROBOT ==================== -->
+    <div id="robotScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>റോബോട്ട് വരയ്ക്കാം</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-2">കുത്തുകളിലൂടെ വരച്ച് റോബോട്ടിന് നിറം കൊടുക്കൂ!</p>
+            <p class="text-sm text-gray-500 mb-3">"ഹായ്... എന്റെ റോബോട്ട്. ഇതിലെല്ലാം വട്ടങ്ങള്‍!"</p>
+            <div class="color-palette" id="colorPaletteRobot"></div>
+            <svg viewBox="0 0 200 260" class="w-full max-w-xs mx-auto my-3" id="robotSvg">
+                <rect x="70" y="20" width="60" height="50" rx="5" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <circle cx="85" cy="40" r="8" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <circle cx="115" cy="40" r="8" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <rect x="90" y="55" width="20" height="6" fill="#333"/>
+                <line x1="100" y1="20" x2="100" y2="5" stroke="#333" stroke-width="2"/>
+                <circle cx="100" cy="5" r="5" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <rect x="55" y="80" width="90" height="80" rx="5" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <circle cx="80" cy="110" r="10" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <circle cx="100" cy="110" r="10" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <circle cx="120" cy="110" r="10" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <rect x="20" y="90" width="35" height="15" rx="5" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <rect x="145" y="90" width="35" height="15" rx="5" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <circle cx="20" cy="97" r="12" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <circle cx="180" cy="97" r="12" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></circle>
+                <rect x="70" y="170" width="20" height="50" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <rect x="110" y="170" width="20" height="50" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <rect x="60" y="220" width="40" height="15" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+                <rect x="100" y="220" width="40" height="15" class="colorable" data-default="#fef3c7" style="fill:#fef3c7; stroke:#333; stroke-width:2; cursor:pointer;" onclick="colorShape(this)"></rect>
+            </svg>
+            <button class="btn-action w-full" onclick="resetColors('robotScreen')">Reset നിറങ്ങൾ</button>
+        </div>
+    </div>
+
+    <!-- ==================== DOG ==================== -->
+    <div id="dogScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>നായയെ പൂർത്തിയാക്കാം</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-2">മുകളിലെ ചിത്രം നോക്കി പട്ടിയുടെ ശരീരം പൂർത്തിയാക്കൂ!</p>
+            <div class="bg-blue-50 rounded-xl p-3 mb-4 inline-block">
+                <p class="text-4xl">💻🐶</p>
+                <p class="text-xs text-gray-500">ലാപ്‌ടോപ്പിലെ ചിത്രം</p>
+            </div>
+            <canvas id="dogCanvas" class="trace-canvas" height="200"></canvas>
+            <div class="flex gap-2 mt-3">
+                <button class="btn-action flex-1" onclick="clearDog()">മായ്ക്കുക</button>
+                <button class="bg-amber-500 text-white font-bold px-4 py-3 rounded-xl" onclick="showToast('നല്ല നായ! 🐶✨')">കഴിഞ്ഞു!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TREE (NEW) ==================== -->
+    <div id="treeScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>മരം വരയ്ക്കാം</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-2">ത്രികോണങ്ങൾ ചേർത്ത് മരം ഉണ്ടാക്കൂ! (ബുക്ക് പേജ് 14)</p>
+            <div class="flex justify-center gap-4 mb-4">
+                <div class="text-center">
+                    <div class="text-5xl text-green-500">▲</div>
+                    <div class="text-4xl text-green-600 -mt-2">▲</div>
+                    <div class="text-3xl text-green-700 -mt-1">▲</div>
+                    <div class="w-4 h-8 bg-amber-700 mx-auto"></div>
+                </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-3">താഴെ വരച്ച് മരം ഉണ്ടാക്കൂ</p>
+            <canvas id="treeCanvas" class="trace-canvas" height="220"></canvas>
+            <div class="flex gap-2 mt-3">
+                <button class="btn-action flex-1" onclick="clearTree()">മായ്ക്കുക</button>
+                <button class="bg-green-500 text-white font-bold px-4 py-3 rounded-xl" onclick="showToast('നല്ല മരം! 🎄✨')">കഴിഞ്ഞു!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PATTERN SCREEN ==================== -->
+    <div id="patternScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>പാറ്റേൺ പൂർത്തിയാക്കാം</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-4" id="patternQ">അടുത്തത് എന്ത്?</p>
+            <div id="patternRow" class="flex justify-center gap-2 flex-wrap mb-6"></div>
+            <div id="patternOptions" class="grid grid-cols-3 gap-3 max-w-xs mx-auto"></div>
+            <p id="patternResult" class="mt-4 font-bold text-lg"></p>
+            <button class="btn-action w-full mt-4" onclick="initPattern()">Next പാറ്റേൺ ⏭️</button>
+        </div>
+    </div>
+
+    <!-- ==================== BEADS ==================== -->
+    <div id="beadsScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>മുത്തുമാല</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-2">ചുവപ്പ് മുത്ത്, മഞ്ഞ മുത്ത് ഇടവിട്ട് നിറം കൊടുക്കൂ!</p>
+            <p class="text-sm text-gray-500 mb-4">(ബുക്ക് വർക്ക്ഷീറ്റ് 3)</p>
+            <div class="color-palette mb-4">
+                <div class="color-swatch active" style="background:#ef4444" onclick="beadColor='#ef4444'; setActiveSwatch(this)"></div>
+                <div class="color-swatch" style="background:#eab308" onclick="beadColor='#eab308'; setActiveSwatch(this)"></div>
+            </div>
+            <div id="beadString" class="flex flex-wrap justify-center gap-2 max-w-sm mx-auto mb-4"></div>
+            <button class="btn-action w-full" onclick="checkBeads()">പരിശോധിക്കുക</button>
+            <button class="bg-gray-200 text-gray-700 font-bold w-full mt-2 py-3 rounded-xl" onclick="initBeads()">Reset</button>
+        </div>
+    </div>
+
+    <!-- ==================== MEMORY ==================== -->
+    <div id="memoryScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>മെമ്മറി ഗെയിം</h1>
+        </div>
+        <div class="content-card">
+            <div class="flex justify-between mb-3">
+                <span id="memoryMoves" class="font-bold text-amber-700">നീക്കങ്ങൾ: 0</span>
+                <button class="text-sm bg-amber-100 text-amber-800 px-3 py-1 rounded-lg font-bold" onclick="initMemory()">Reset</button>
+            </div>
+            <div class="memory-grid" id="memoryGrid"></div>
+        </div>
+    </div>
+
+    <!-- ==================== MATCH ==================== -->
+    <div id="matchScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>ആകൃതി മാച്ച്</h1>
+        </div>
+        <div class="content-card">
+            <p class="text-center font-bold text-gray-700 mb-4">ഇടത്തും വലത്തും ഒരേ ആകൃതി യോജിപ്പിക്കൂ</p>
+            <div class="grid grid-cols-2 gap-4">
+                <div id="match-left" class="space-y-3">
+                    <div class="match-item" data-id="1" onclick="selectMatchItem('left', this)">🔴 വൃത്തം</div>
+                    <div class="match-item" data-id="2" onclick="selectMatchItem('left', this)">🔺 ത്രികോണം</div>
+                    <div class="match-item" data-id="3" onclick="selectMatchItem('left', this)">🟦 സമചതുരം</div>
+                    <div class="match-item" data-id="4" onclick="selectMatchItem('left', this)">▬ ദീർഘചതുരം</div>
+                </div>
+                <div id="match-right" class="space-y-3">
+                    <div class="match-item" data-id="3" onclick="selectMatchItem('right', this)">ജനൽ</div>
+                    <div class="match-item" data-id="1" onclick="selectMatchItem('right', this)">പന്ത് / ദോശ</div>
+                    <div class="match-item" data-id="4" onclick="selectMatchItem('right', this)">പുസ്തകം</div>
+                    <div class="match-item" data-id="2" onclick="selectMatchItem('right', this)">പതാക</div>
+                </div>
+            </div>
+            <button class="btn-action w-full mt-6" onclick="resetMatch()">Reset</button>
+        </div>
+    </div>
+
+    <!-- ==================== COUNT SHAPES (NEW) ==================== -->
+    <div id="countScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>ആകൃതി എണ്ണാം</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-3" id="countQuestion">എത്ര വൃത്തങ്ങൾ ഉണ്ട്?</p>
+            <div class="count-box mb-4" id="countDisplay"></div>
+            <div class="grid grid-cols-3 gap-3 max-w-xs mx-auto" id="countOptions"></div>
+            <button class="btn-action w-full mt-4" onclick="initCount()">Next ⏭️</button>
+        </div>
+    </div>
+
+    <!-- ==================== IDENTIFY ==================== -->
+    <div id="identifyScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>ആകൃതി കണ്ടെത്താം</h1>
+        </div>
+        <div class="content-card text-center">
+            <div class="flex justify-between items-center mb-4">
+                <p class="font-bold text-gray-700">ഈ ആകൃതി ഏതാണ്?</p>
+                <span id="idProgress" class="bg-violet-100 text-violet-800 px-3 py-1 rounded-lg font-bold"></span>
+            </div>
+            <div class="text-8xl mb-6" id="idShapeDisplay">🔴</div>
+            <div class="grid grid-cols-2 gap-3" id="idOptions"></div>
+        </div>
+    </div>
+
+    <!-- ==================== OBJECTS ==================== -->
+    <div id="objectsScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>വസ്തുക്കളിലെ ആകൃതി</h1>
+        </div>
+        <div class="content-card">
+            <p class="font-bold text-center text-gray-700 mb-4">നമുക്കുള്ള രൂപങ്ങൾക്ക് അതേ രൂപത്തിലുള്ള വസ്തു</p>
+            <div class="grid grid-cols-3 gap-3 text-center mb-6">
+                <div class="bg-red-50 border-2 border-red-200 rounded-xl p-3">
+                    <div class="text-4xl">🔺</div>
+                    <p class="text-xs font-bold mt-1">ത്രികോണം</p>
+                    <p class="text-2xl mt-2">🍕 ⛺</p>
+                </div>
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-3">
+                    <div class="text-4xl">🟦</div>
+                    <p class="text-xs font-bold mt-1">സമചതുരം</p>
+                    <p class="text-2xl mt-2">🪟 📦</p>
+                </div>
+                <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-3">
+                    <div class="text-4xl">🔴</div>
+                    <p class="text-xs font-bold mt-1">വൃത്തം</p>
+                    <p class="text-2xl mt-2">⚽ 🫓 💍</p>
+                </div>
+            </div>
+            <div class="bg-amber-50 border-2 border-amber-200 rounded-xl p-4">
+                <p class="font-bold text-amber-800 mb-2">നിങ്ങൾ കണ്ടെത്തിയ വസ്തുക്കൾ:</p>
+                <div class="grid grid-cols-3 gap-2 text-center text-sm">
+                    <div class="bg-white rounded-lg p-2 border">📱 മൊബൈൽ<br><span class="text-xs text-gray-500">ദീർഘചതുരം</span></div>
+                    <div class="bg-white rounded-lg p-2 border">🕐 ക്ലോക്ക്<br><span class="text-xs text-gray-500">വൃത്തം</span></div>
+                    <div class="bg-white rounded-lg p-2 border">📖 പുസ്തകം<br><span class="text-xs text-gray-500">ദീർഘചതുരം</span></div>
+                    <div class="bg-white rounded-lg p-2 border">🍕 പിസ്സ<br><span class="text-xs text-gray-500">ത്രികോണം</span></div>
+                    <div class="bg-white rounded-lg p-2 border">🛞 ചക്രം<br><span class="text-xs text-gray-500">വൃത്തം</span></div>
+                    <div class="bg-white rounded-lg p-2 border">🪟 ജനൽ<br><span class="text-xs text-gray-500">സമചതുരം</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SORT (NEW) ==================== -->
+    <div id="sortScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>ആകൃതി തരംതിരിക്കാം</h1>
+        </div>
+        <div class="content-card text-center">
+            <p class="font-bold text-gray-700 mb-3">ശരിയായ ബോക്സിലേക്ക് ആകൃതി ഇടൂ</p>
+            <div class="flex justify-center gap-3 mb-4 flex-wrap" id="sortItems">
+                <button class="text-4xl p-2 bg-white border-2 border-gray-300 rounded-xl" data-shape="circle" onclick="sortPick(this)">🔴</button>
+                <button class="text-4xl p-2 bg-white border-2 border-gray-300 rounded-xl" data-shape="triangle" onclick="sortPick(this)">🔺</button>
+                <button class="text-4xl p-2 bg-white border-2 border-gray-300 rounded-xl" data-shape="square" onclick="sortPick(this)">🟦</button>
+                <button class="text-4xl p-2 bg-white border-2 border-gray-300 rounded-xl" data-shape="circle" onclick="sortPick(this)">⚽</button>
+                <button class="text-4xl p-2 bg-white border-2 border-gray-300 rounded-xl" data-shape="triangle" onclick="sortPick(this)">🍕</button>
+                <button class="text-4xl p-2 bg-white border-2 border-gray-300 rounded-xl" data-shape="square" onclick="sortPick(this)">🪟</button>
+            </div>
+            <p class="text-sm text-gray-500 mb-2" id="sortHint">ഒരു ആകൃതി തിരഞ്ഞെടുക്കൂ</p>
+            <div class="grid grid-cols-3 gap-3">
+                <div class="bg-red-50 border-2 border-red-300 rounded-xl p-3 min-h-[80px]" onclick="sortDrop('circle')">
+                    <p class="font-bold text-red-700 text-sm">വൃത്തം</p>
+                    <div id="bin-circle" class="flex flex-wrap gap-1 justify-center mt-2"></div>
+                </div>
+                <div class="bg-green-50 border-2 border-green-300 rounded-xl p-3 min-h-[80px]" onclick="sortDrop('triangle')">
+                    <p class="font-bold text-green-700 text-sm">ത്രികോണം</p>
+                    <div id="bin-triangle" class="flex flex-wrap gap-1 justify-center mt-2"></div>
+                </div>
+                <div class="bg-blue-50 border-2 border-blue-300 rounded-xl p-3 min-h-[80px]" onclick="sortDrop('square')">
+                    <p class="font-bold text-blue-700 text-sm">സമചതുരം</p>
+                    <div id="bin-square" class="flex flex-wrap gap-1 justify-center mt-2"></div>
+                </div>
+            </div>
+            <button class="btn-action w-full mt-4" onclick="initSort()">Reset</button>
+        </div>
+    </div>
+
+    <!-- ==================== QUIZ ==================== -->
+    <div id="quizScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>മെഗാ ക്വിസ്</h1>
+        </div>
+        <div class="content-card">
+            <div id="quizQuestionArea">
+                <div class="flex justify-between mb-3">
+                    <span id="quizProgress" class="font-bold text-violet-700"></span>
+                </div>
+                <p id="questionText" class="text-lg font-bold text-gray-800 mb-5"></p>
+                <div id="optionsGrid" class="grid grid-cols-1 gap-3"></div>
+            </div>
+            <div id="quizResultArea" style="display:none;" class="text-center py-8">
+                <div class="text-6xl mb-4">🏆</div>
+                <p class="text-2xl font-bold text-green-700">നിങ്ങളുടെ സ്കോർ</p>
+                <p class="text-5xl font-extrabold text-amber-600 my-3"><span id="finalScore">0</span> / 8</p>
+                <button class="btn-action mt-4" onclick="initQuiz()">വീണ്ടും കളിക്കാം</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODEL QP ==================== -->
+    <div id="modelQPScreen" class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅ Home</button>
+            <h1>മോഡൽ ചോദ്യപേപ്പർ</h1>
+        </div>
+        <div class="content-card">
+            <div class="text-center mb-5 border-b-2 border-gray-300 pb-2">
+                <h2 class="text-xl font-bold text-emerald-800">മോഡൽ ചോദ്യപേപ്പർ - ഗണിതം</h2>
+                <p class="font-bold text-gray-500">ക്ലാസ് 1 | വരമേളം | സമയം: 30 മിനിറ്റ്</p>
+            </div>
+            
+            <div class="space-y-5 text-gray-800">
+                <div>
+                    <h3 class="font-bold text-lg mb-2 text-blue-800">1. ശരിയായ ഉത്തരം തിരഞ്ഞെടുക്കുക:</h3>
+                    <ul class="list-none space-y-3 ml-2">
+                        <li>എ) വൃത്തത്തിന് _____ വശങ്ങളുണ്ട്.<br><span class="text-sm font-semibold text-gray-600">( 0 , 3 , 4 )</span></li>
+                        <li>ബി) ത്രികോണത്തിന് _____ മൂലകളുണ്ട്.<br><span class="text-sm font-semibold text-gray-600">( 2 , 3 , 4 )</span></li>
+                        <li>സി) ദോശയുടെ ആകൃതി _____ ആണ്.<br><span class="text-sm font-semibold text-gray-600">( ത്രികോണം , വൃത്തം , സമചതുരം )</span></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2 text-blue-800">2. പൂരിപ്പിക്കുക:</h3>
+                    <ul class="list-none space-y-2 ml-2">
+                        <li>എ) സമചതുരത്തിന് _____ വശങ്ങളുണ്ട്.</li>
+                        <li>ബി) പന്തിന്റെ ആകൃതി _____ ആണ്.</li>
+                        <li>സി) പുസ്തകത്തിന്റെ ആകൃതി _____ ആണ്.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2 text-blue-800">3. ആകൃതി എഴുതുക:</h3>
+                    <ul class="list-none space-y-2 ml-2">
+                        <li>എ) 🔴 → _______________</li>
+                        <li>ബി) 🔺 → _______________</li>
+                        <li>സി) 🟦 → _______________</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="btn-action w-full mt-6 py-3 text-lg" onclick="toggleModelAnswers()">ഉത്തരങ്ങൾ കാണുക / മറയ്ക്കുക 👁️</button>
+            
+            <div id="modelAnswers" class="hidden-answer">
+                <h4 class="font-bold mb-3 text-xl border-b border-green-300 pb-2 text-green-800">ഉത്തരങ്ങൾ:</h4>
+                <p class="font-bold mb-1">1.</p>
+                <p class="ml-4 mb-2">എ) 0<br>ബി) 3<br>സി) വൃത്തം</p>
+                <p class="font-bold mb-1">2.</p>
+                <p class="ml-4 mb-2">എ) 4<br>ബി) വൃത്തം<br>സി) ദീർഘചതുരം</p>
+                <p class="font-bold mb-1">3.</p>
+                <p class="ml-4 mb-2">എ) വൃത്തം<br>ബി) ത്രികോണം<br>സി) സമചതുരം</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== LESSON QP ==================== -->
+    <div id="lessonQPScreen" class="screen">
+        <div class="header no-print">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅</button>
+            <h1>ലെസൻ ചോദ്യപേപ്പർ</h1>
+        </div>
+        <div class="flex gap-3 mb-4 no-print px-2">
+            <button class="flex-1 bg-blue-100 text-blue-700 py-3 rounded-xl font-bold border border-blue-300" onclick="window.print()">🖨️ പ്രിന്റ്</button>
+            <button class="flex-1 bg-red-100 text-red-700 py-3 rounded-xl font-bold border border-red-300" onclick="downloadLessonPDF()">⬇️ PDF ഡൗൺലോഡ്</button>
+        </div>
+        
+        <div class="content-card text-sm mx-2 bg-white" id="printableLessonQP" style="padding: 24px;">
+            <div class="text-center mb-5 border-b-2 border-black pb-3">
+                <h2 class="text-xl font-bold">ലെസൻ ടെസ്റ്റ്</h2>
+                <h3 class="font-bold mt-1">ഗണിതം - ക്ലാസ് 1 | വരമേളം</h3>
+                <p class="text-sm mt-1">സമയം: 20 മിനിറ്റ് | മാർക്ക്: 10</p>
+            </div>
+            
+            <div class="space-y-5 text-base">
+                <div>
+                    <h3 class="font-bold mb-2">1. ആകൃതി തിരിച്ചറിയുക (3 മാർക്ക്)</h3>
+                    <p class="mb-1">എ) 🔴 → ........................</p>
+                    <p class="mb-1">ബി) 🔺 → ........................</p>
+                    <p>സി) 🟦 → ........................</p>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold mb-2">2. വശങ്ങളുടെ എണ്ണം എഴുതുക (3 മാർക്ക്)</h3>
+                    <p class="mb-1">എ) ത്രികോണം → ........ വശങ്ങൾ</p>
+                    <p class="mb-1">ബി) സമചതുരം → ........ വശങ്ങൾ</p>
+                    <p>സി) വൃത്തം → ........ വശങ്ങൾ</p>
+                </div>
+
+                <div>
+                    <h3 class="font-bold mb-2">3. ശരിയായ ഉത്തരം തിരഞ്ഞെടുക്കുക (2 മാർക്ക്)</h3>
+                    <p class="mb-1">എ) ദോശയുടെ ആകൃതി: ( ത്രികോണം / വൃത്തം / സമചതുരം )</p>
+                    <p>ബി) പുസ്തകത്തിന്റെ ആകൃതി: ( വൃത്തം / ദീർഘചതുരം / ത്രികോണം )</p>
+                </div>
+
+                <div>
+                    <h3 class="font-bold mb-2">4. പാറ്റേൺ പൂർത്തിയാക്കുക (2 മാർക്ക്)</h3>
+                    <p class="mb-2">🔴 🟦 🔴 🟦 🔴 ........</p>
+                    <p>🔺 🔺 🟦 🔺 🔺 🟦 ........</p>
+                </div>
+            </div>
+            <div class="mt-8 text-center font-bold text-gray-400">***</div>
+        </div>
+    </div>
+
+    <!-- ==================== UNIT TEST ==================== -->
+    <div id="unitTestScreen" class="screen">
+        <div class="header no-print">
+            <button class="back-btn" onclick="showScreen('homeScreen')">⬅</button>
+            <h1>യൂണിറ്റ് ടെസ്റ്റ്</h1>
+        </div>
+        <div class="flex gap-3 mb-4 no-print px-2">
+            <button class="flex-1 bg-blue-100 text-blue-700 py-3 rounded-xl font-bold border border-blue-300" onclick="window.print()">🖨️ പ്രിന്റ്</button>
+            <button class="flex-1 bg-red-100 text-red-700 py-3 rounded-xl font-bold border border-red-300" onclick="downloadPDF()">⬇️ PDF</button>
+        </div>
+        
+        <div class="content-card text-sm mx-2 bg-white" id="printableQP" style="padding: 24px;">
+            <div class="text-center mb-5 border-b-2 border-black pb-3">
+                <h2 class="text-xl font-bold">യൂണിറ്റ് മൂല്യനിർണ്ണയം</h2>
+                <h3 class="font-bold mt-1">ഗണിതം - ക്ലാസ് 1 | വരമേളം</h3>
+            </div>
+            
+            <div class="space-y-5 text-base">
+                <div>
+                    <h3 class="font-bold mb-2">1. ആകൃതി തിരിച്ചറിയുക (3 സ്കോർ)</h3>
+                    <p class="mb-1">എ) 🔴 → ........................</p>
+                    <p class="mb-1">ബി) 🔺 → ........................</p>
+                    <p>സി) 🟦 → ........................</p>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold mb-2">2. വശങ്ങളുടെ എണ്ണം എഴുതുക (3 സ്കോർ)</h3>
+                    <p class="mb-1">എ) ത്രികോണം → ........ വശങ്ങൾ</p>
+                    <p class="mb-1">ബി) സമചതുരം → ........ വശങ്ങൾ</p>
+                    <p>സി) വൃത്തം → ........ വശങ്ങൾ</p>
+                </div>
+
+                <div>
+                    <h3 class="font-bold mb-2">3. ശരിയായ ഉത്തരം തിരഞ്ഞെടുക്കുക (2 സ്കോർ)</h3>
+                    <p class="mb-1">എ) ദോശയുടെ ആകൃതി: ( ത്രികോണം / വൃത്തം / സമചതുരം )</p>
+                    <p>ബി) പുസ്തകത്തിന്റെ ആകൃതി: ( വൃത്തം / ദീർഘചതുരം / ത്രികോണം )</p>
+                </div>
+
+                <div>
+                    <h3 class="font-bold mb-2">4. പാറ്റേൺ പൂർത്തിയാക്കുക (2 സ്കോർ)</h3>
+                    <p class="mb-2">🔴 🟦 🔴 🟦 🔴 ........</p>
+                    <p>🔺 🔺 🟦 🔺 🔺 🟦 ........</p>
+                </div>
+            </div>
+            <div class="mt-8 text-center font-bold text-gray-400">***</div>
+        </div>
+    </div>
+
+    <!-- Zoom controls -->
+    <div class="zoom-controls no-print">
+        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In">+</button>
+        <button class="zoom-btn" onclick="zoomReset()" title="Reset" style="font-size:0.9rem;">1x</button>
+        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out">−</button>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">Message</div>
+
+</div>
+
+<script>
+    // ========== UTILITIES ==========
+    function showScreen(id) {
+        if (typeof stopSpeaking === 'function') stopSpeaking();
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo({top:0, behavior:'smooth'});
+    }
+    function showToast(msg, duration=2200, isSuccess=true) {
+        const t = document.getElementById('toast');
+        t.innerText = msg;
+        t.style.backgroundColor = isSuccess ? '#10b981' : '#ef4444';
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), duration);
+    }
+
+    // ========== MALAYALAM TTS (Model-style: AUDIO_MAP + Google TTS + SpeechSynthesis) ==========
+    // Primary: Google Translate TTS (excellent Malayalam). Fallback: system ml-IN voice.
+    // AUDIO_MAP can hold data: URLs or remote URLs for offline-first phrases.
+    window.AUDIO_MAP = window.AUDIO_MAP || {};
+    let ttsAudio = null, ttsToken = 0, ttsStopped = false, currentReadBtn = null, chosenVoice = null, audioUnlocked = false;
+
+    function pickMalayalamVoice() {
+        if (!('speechSynthesis' in window)) return null;
+        const voices = window.speechSynthesis.getVoices() || [];
+        const score = v => {
+            const n = (v.name || '').toLowerCase(), l = (v.lang || '').toLowerCase();
+            if (!l.startsWith('ml')) return 0;
+            if (/neural|natural|online|google|microsoft|sobhana|midhun|premium|samsung/.test(n)) return 5;
+            if (l === 'ml-in' || l === 'ml_in') return 4;
+            return 3;
+        };
+        let best = null, bestS = 0;
+        voices.forEach(v => { const s = score(v); if (s > bestS) { best = v; bestS = s; } });
+        return bestS >= 3 ? best : null;
+    }
+    function pickVoice() { chosenVoice = pickMalayalamVoice(); return chosenVoice; }
+    if ('speechSynthesis' in window) {
+        try { window.speechSynthesis.getVoices(); window.speechSynthesis.onvoiceschanged = pickVoice; } catch (e) {}
+    }
+
+    function unlockAudio() {
+        audioUnlocked = true;
+        try {
+            const a = document.getElementById('ttsPlayer');
+            if (a) {
+                a.playsInline = true; a.muted = true;
+                const p = a.play();
+                if (p && p.catch) p.catch(function () {});
+                setTimeout(function () { try { a.pause(); a.muted = false; a.removeAttribute('src'); } catch (e) {} }, 80);
+            }
+        } catch (e) {}
+        if ('speechSynthesis' in window) {
+            try { window.speechSynthesis.getVoices(); pickVoice(); if (window.speechSynthesis.paused) window.speechSynthesis.resume(); } catch (e) {}
+        }
+    }
+    document.addEventListener('touchstart', unlockAudio, { once: false, passive: true });
+    document.addEventListener('click', unlockAudio, true);
+
+    function getPlayer() {
+        var a = document.getElementById('ttsPlayer');
+        if (!a) {
+            a = document.createElement('audio');
+            a.id = 'ttsPlayer';
+            a.setAttribute('playsinline', 'true');
+            a.setAttribute('webkit-playsinline', 'true');
+            a.style.display = 'none';
+            document.body.appendChild(a);
+        }
+        return a;
+    }
+
+    function playSrc(src) {
+        return new Promise(function (resolve, reject) {
+            try {
+                var a = getPlayer();
+                ttsAudio = a;
+                a.onended = function () { resolve(); };
+                a.onerror = function () { reject(new Error('audio error')); };
+                a.src = src;
+                a.playbackRate = 0.92; // slightly slower for clear Malayalam song style
+                var p = a.play();
+                if (p && p.catch) p.catch(function () { reject(new Error('play failed')); });
+            } catch (e) { reject(e); }
+        });
+    }
+
+    function splitMlChunks(text, maxLen) {
+        const clean = String(text || '').replace(/\s+/g, ' ').trim();
+        if (!clean) return [];
+        if (clean.length <= maxLen) return [clean];
+        // Split on Malayalam / punctuation boundaries for natural song pauses
+        const parts = clean.split(/([।.!?…,;:\n\?])\s*/);
+        const out = []; let buf = '';
+        for (let i = 0; i < parts.length; i++) {
+            const p = parts[i];
+            if (!p) continue;
+            if ((buf + p).length <= maxLen) { buf += p; continue; }
+            if (buf) out.push(buf.trim());
+            if (p.length <= maxLen) { buf = p; continue; }
+            for (let k = 0; k < p.length; k += maxLen) out.push(p.slice(k, k + maxLen));
+            buf = '';
+        }
+        if (buf.trim()) out.push(buf.trim());
+        return out.filter(Boolean);
+    }
+
+    function googleUrls(text, tl) {
+        const q = encodeURIComponent(text);
+        return [
+            'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=' + tl + '&q=' + q,
+            'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + tl + '&q=' + q
+        ];
+    }
+
+    function speakViaSystem(text, onend) {
+        if (!('speechSynthesis' in window)) { if (onend) onend(); return; }
+        pickVoice();
+        var pieces = splitMlChunks(text, 180);
+        var i = 0;
+        function next() {
+            if (ttsStopped) { if (onend) onend(); return; }
+            if (i >= pieces.length) { if (onend) onend(); return; }
+            try { window.speechSynthesis.resume(); } catch (e) {}
+            var u = new SpeechSynthesisUtterance(pieces[i]);
+            u.lang = 'ml-IN';
+            u.rate = 0.78;  // slow, clear Malayalam song style
+            u.pitch = 1.0;
+            u.volume = 1.0;
+            var v = pickMalayalamVoice();
+            if (v) u.voice = v;
+            u.onend = function () { i++; next(); };
+            u.onerror = function () { i++; next(); };
+            try { window.speechSynthesis.speak(u); } catch (e) { i++; next(); }
+        }
+        next();
+    }
+
+    function playGoogleChunks(chunks, onend) {
+        var token = ttsToken;
+        var i = 0;
+        function next() {
+            if (ttsStopped || token !== ttsToken) { if (onend) onend(); return; }
+            if (i >= chunks.length) { if (onend) onend(); return; }
+            var urls = googleUrls(chunks[i], 'ml');
+            var u = 0;
+            function tryUrl() {
+                if (ttsStopped || token !== ttsToken) { if (onend) onend(); return; }
+                if (u >= urls.length) {
+                    speakViaSystem(chunks[i], function () { i++; next(); });
+                    return;
+                }
+                playSrc(urls[u]).then(function () { i++; next(); }).catch(function () { u++; tryUrl(); });
+            }
+            tryUrl();
+        }
+        next();
+    }
+
+    function stopSpeaking() {
+        ttsStopped = true;
+        ttsToken++;
+        try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+        try {
+            var a = document.getElementById('ttsPlayer');
+            if (a) { a.pause(); a.removeAttribute('src'); }
+            ttsAudio = null;
+        } catch (e) {}
+        if (currentReadBtn) {
+            currentReadBtn.classList.remove('speaking');
+            currentReadBtn.innerHTML = '🔊 വായിക്കുക';
+            currentReadBtn = null;
+        }
+    }
+    // alias used by model-style code
+    function stopSpeech() { stopSpeaking(); }
+
+    function speakText(text, onend) {
+        try { unlockAudio(); } catch (e) {}
+        stopSpeaking();
+        ttsStopped = false;
+        var token = ++ttsToken;
+        var raw = String(text || '').trim().replace(/\s+/g, ' ');
+        if (!raw) { if (onend) onend(); return; }
+        var map = (typeof AUDIO_MAP === 'object' && AUDIO_MAP) ? AUDIO_MAP : (window.AUDIO_MAP || {});
+        var bundled = map[raw];
+        function done() { if (token === ttsToken && onend) onend(); }
+        if (bundled) {
+            playSrc(bundled).then(function () { done(); }).catch(function () {
+                if (token !== ttsToken) { if (onend) onend(); return; }
+                var chunks = splitMlChunks(raw, 120);
+                playGoogleChunks(chunks, onend);
+            });
+            return;
+        }
+        var chunks = splitMlChunks(raw, 120);
+        if (!chunks.length) { if (onend) onend(); return; }
+        // Prefer Google TTS for natural Malayalam song style; system voice as fallback inside playGoogleChunks
+        playGoogleChunks(chunks, onend);
+    }
+
+    function speakMalayalam(textId, btn) {
+        const el = document.getElementById(textId);
+        if (!el) return;
+        const text = (el.innerText || el.textContent || '').trim();
+        if (!text) return;
+
+        // Toggle stop if same button is speaking
+        if (btn && btn.classList.contains('speaking')) {
+            stopSpeaking();
+            return;
+        }
+        stopSpeaking();
+        currentReadBtn = btn;
+        if (btn) {
+            btn.classList.add('speaking');
+            btn.innerHTML = '⏹ നിർത്തുക';
+        }
+        speakText(text, function () {
+            if (currentReadBtn === btn && btn) {
+                btn.classList.remove('speaking');
+                btn.innerHTML = '🔊 വായിക്കുക';
+                currentReadBtn = null;
+            }
+        });
+    }
+
+    // ========== ZOOM ==========
+    let appZoom = 1;
+    function zoomIn() {
+        appZoom = Math.min(2, appZoom + 0.15);
+        document.querySelector('.app-container').style.zoom = appZoom;
+    }
+    function zoomOut() {
+        appZoom = Math.max(0.7, appZoom - 0.15);
+        document.querySelector('.app-container').style.zoom = appZoom;
+    }
+    function zoomReset() {
+        appZoom = 1;
+        document.querySelector('.app-container').style.zoom = 1;
+    }
+
+    // ========== COLORING SYSTEM ==========
+    let currentColor = '#ef4444';
+    const paletteColors = ['#ef4444','#3b82f6','#22c55e','#eab308','#8b5cf6','#ec4899','#f97316','#1e293b'];
+    
+    function buildPalette(containerId) {
+        const el = document.getElementById(containerId);
+        if(!el) return;
+        el.innerHTML = '';
+        paletteColors.forEach(c => {
+            const d = document.createElement('div');
+            d.className = 'color-swatch';
+            d.style.background = c;
+            d.onclick = () => {
+                currentColor = c;
+                el.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                d.classList.add('active');
+            };
+            el.appendChild(d);
+        });
+        if(el.firstChild) el.firstChild.classList.add('active');
+    }
+    function colorShape(el) {
+        el.style.fill = currentColor;
+    }
+    function resetColors(screenId) {
+        const screen = document.getElementById(screenId);
+        screen.querySelectorAll('.colorable').forEach(el => {
+            el.style.fill = el.dataset.default || '#fef3c7';
+        });
+        showToast('നിറങ്ങൾ മായ്ച്ചു!');
+    }
+    function initColorShapes() { buildPalette('colorPalette1'); }
+    function initColorTrain() { buildPalette('colorPalette2'); }
+    function initColorAnimals() { buildPalette('colorPalette3'); }
+    function initColorVehicles() { buildPalette('colorPalette4'); }
+    function initColorFlower() { buildPalette('colorPalette5'); }
+    function initRobot() { buildPalette('colorPaletteRobot'); }
+
+    // ========== TRACE CANVAS ==========
+    let traceColor = '#ef4444';
+    let tracing = false;
+    const shapesToTrace = [
+        {name: 'വൃത്തം വരയ്ക്കൂ!', draw: (ctx,w,h) => { ctx.beginPath(); ctx.arc(w/2,h/2,80,0,Math.PI*2); ctx.strokeStyle='#fde68a'; ctx.lineWidth=3; ctx.setLineDash([8,6]); ctx.stroke(); ctx.setLineDash([]); }},
+        {name: 'ത്രികോണം വരയ്ക്കൂ!', draw: (ctx,w,h) => { ctx.beginPath(); ctx.moveTo(w/2,30); ctx.lineTo(w/2+90,h-30); ctx.lineTo(w/2-90,h-30); ctx.closePath(); ctx.strokeStyle='#fde68a'; ctx.lineWidth=3; ctx.setLineDash([8,6]); ctx.stroke(); ctx.setLineDash([]); }},
+        {name: 'സമചതുരം വരയ്ക്കൂ!', draw: (ctx,w,h) => { ctx.strokeStyle='#fde68a'; ctx.lineWidth=3; ctx.setLineDash([8,6]); ctx.strokeRect(w/2-70,h/2-70,140,140); ctx.setLineDash([]); }},
+        {name: 'ദീർഘചതുരം വരയ്ക്കൂ!', draw: (ctx,w,h) => { ctx.strokeStyle='#fde68a'; ctx.lineWidth=3; ctx.setLineDash([8,6]); ctx.strokeRect(w/2-100,h/2-50,200,100); ctx.setLineDash([]); }}
+    ];
+    let traceIdx = 0;
+    
+    function setTraceColor(c) { traceColor = c; }
+    function initTrace() {
+        traceIdx = 0;
+        setTimeout(setupTraceCanvas, 50);
+    }
+    function setupTraceCanvas() {
+        const canvas = document.getElementById('traceCanvas');
+        if(!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth || 300;
+        canvas.height = 280;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        document.getElementById('tracePrompt').innerText = shapesToTrace[traceIdx].name;
+        shapesToTrace[traceIdx].draw(ctx, canvas.width, canvas.height);
+        
+        const getPos = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const src = e.touches ? e.touches[0] : e;
+            return { x: src.clientX - rect.left, y: src.clientY - rect.top };
+        };
+        const start = (e) => { e.preventDefault(); tracing=true; const p=getPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); };
+        const move = (e) => {
+            if(!tracing) return;
+            e.preventDefault();
+            const p = getPos(e);
+            ctx.lineWidth=4; ctx.lineCap='round'; ctx.strokeStyle=traceColor;
+            ctx.lineTo(p.x,p.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(p.x,p.y);
+        };
+        const end = () => { tracing=false; ctx.beginPath(); };
+        
+        canvas.onmousedown = start; canvas.ontouchstart = start;
+        canvas.onmousemove = move; canvas.ontouchmove = move;
+        canvas.onmouseup = end; canvas.ontouchend = end; canvas.onmouseleave = end;
+    }
+    function clearTrace() { setupTraceCanvas(); }
+    function nextTraceShape() {
+        traceIdx = (traceIdx + 1) % shapesToTrace.length;
+        setupTraceCanvas();
+    }
+
+    // ========== FREE DRAW CANVASES (FIXED) ==========
+    function setupFreeCanvas(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        if(!canvas) return;
+        const ctx = canvas.getContext('2d');
+        // Force size
+        const w = canvas.offsetWidth || canvas.parentElement.offsetWidth || 300;
+        canvas.width = w;
+        canvas.height = canvas.height || 220;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        let drawing = false;
+        const getPos = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const src = e.touches ? e.touches[0] : e;
+            return { x: src.clientX - rect.left, y: src.clientY - rect.top };
+        };
+        const start = (e) => {
+            e.preventDefault();
+            drawing = true;
+            const p = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+        };
+        const move = (e) => {
+            if(!drawing) return;
+            e.preventDefault();
+            const p = getPos(e);
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#ea580c';
+            ctx.lineTo(p.x, p.y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+        };
+        const end = () => { drawing = false; ctx.beginPath(); };
+        
+        canvas.onmousedown = start;
+        canvas.ontouchstart = start;
+        canvas.onmousemove = move;
+        canvas.ontouchmove = move;
+        canvas.onmouseup = end;
+        canvas.ontouchend = end;
+        canvas.onmouseleave = end;
+    }
+    
+    function initFishDraw() {
+        // Delay to ensure screen is visible and has width
+        setTimeout(() => setupFreeCanvas('fishCanvas'), 80);
+    }
+    function clearFish() { setupFreeCanvas('fishCanvas'); }
+    
+    function initDog() {
+        setTimeout(() => setupFreeCanvas('dogCanvas'), 80);
+    }
+    function clearDog() { setupFreeCanvas('dogCanvas'); }
+    
+    function initTree() {
+        setTimeout(() => setupFreeCanvas('treeCanvas'), 80);
+    }
+    function clearTree() { setupFreeCanvas('treeCanvas'); }
+
+    // ========== PATTERN ==========
+    const patterns = [
+        { seq: ['🔴','🟦','🔴','🟦','🔴'], ans: '🟦', opts: ['🔴','🟦','🔺'] },
+        { seq: ['🔺','🔺','🟦','🔺','🔺'], ans: '🟦', opts: ['🔺','🟦','🔴'] },
+        { seq: ['⭐','⭐','🌙','⭐','⭐'], ans: '🌙', opts: ['⭐','🌙','🔴'] },
+        { seq: ['🟢','🟡','🟢','🟡','🟢'], ans: '🟡', opts: ['🟢','🟡','🔵'] },
+        { seq: ['🔺','🟦','🔺','🟦','🔺'], ans: '🟦', opts: ['🔺','🟦','🔴'] },
+        { seq: ['🔴','🔴','🟦','🔴','🔴'], ans: '🟦', opts: ['🔴','🟦','🔺'] }
+    ];
+    let patIdx = 0;
+    function initPattern() {
+        patIdx = Math.floor(Math.random()*patterns.length);
+        const p = patterns[patIdx];
+        document.getElementById('patternQ').innerText = 'അടുത്തത് എന്ത്?';
+        document.getElementById('patternResult').innerText = '';
+        const row = document.getElementById('patternRow');
+        row.innerHTML = '';
+        p.seq.forEach(s => {
+            const d = document.createElement('div');
+            d.className = 'pattern-cell';
+            d.innerText = s;
+            row.appendChild(d);
+        });
+        const empty = document.createElement('div');
+        empty.className = 'pattern-cell empty';
+        empty.innerText = '?';
+        row.appendChild(empty);
+        
+        const opts = document.getElementById('patternOptions');
+        opts.innerHTML = '';
+        p.opts.forEach(o => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-opt text-3xl py-4';
+            btn.innerText = o;
+            btn.onclick = () => {
+                if(o === p.ans) {
+                    showToast('ശരി! 🎉');
+                    document.getElementById('patternResult').innerText = '✅ ശരിയായ ഉത്തരം!';
+                    document.getElementById('patternResult').className = 'mt-4 font-bold text-lg text-green-600';
+                    empty.innerText = o;
+                    empty.classList.remove('empty');
+                } else {
+                    showToast('തെറ്റ്! വീണ്ടും ശ്രമിക്കൂ', 1800, false);
+                }
+            };
+            opts.appendChild(btn);
+        });
+    }
+
+    // ========== BEADS ==========
+    let beadColor = '#ef4444';
+    function setActiveSwatch(el) {
+        document.querySelectorAll('#beadsScreen .color-swatch').forEach(s => s.classList.remove('active'));
+        el.classList.add('active');
+    }
+    function initBeads() {
+        const str = document.getElementById('beadString');
+        str.innerHTML = '';
+        const pattern = ['#ef4444','#eab308','#eab308','#eab308','#ef4444','#eab308','#eab308','#eab308'];
+        for(let i=0; i<8; i++) {
+            const b = document.createElement('div');
+            b.className = 'w-9 h-9 rounded-full border-2 border-gray-400';
+            b.style.background = pattern[i];
+            str.appendChild(b);
+        }
+        for(let i=0; i<12; i++) {
+            const b = document.createElement('div');
+            b.className = 'w-9 h-9 rounded-full border-2 border-dashed border-amber-400 bg-amber-50 cursor-pointer';
+            b.dataset.filled = '0';
+            b.onclick = () => {
+                b.style.background = beadColor;
+                b.style.borderStyle = 'solid';
+                b.dataset.filled = beadColor;
+            };
+            str.appendChild(b);
+        }
+    }
+    function checkBeads() {
+        const beads = [...document.getElementById('beadString').children].slice(8);
+        let ok = true;
+        const expected = ['#ef4444','#eab308','#eab308','#eab308','#ef4444','#eab308','#eab308','#eab308','#ef4444','#eab308','#eab308','#eab308'];
+        beads.forEach((b,i) => {
+            if(b.dataset.filled !== expected[i]) ok = false;
+        });
+        if(ok) showToast('ഗംഭീരം! പാറ്റേൺ ശരി! 📿🎉');
+        else showToast('പാറ്റേൺ വീണ്ടും നോക്കൂ', 2000, false);
+    }
+
+    // ========== MEMORY ==========
+    const memPairs = [
+        {id:1, val:'🔴'}, {id:1, val:'വൃത്തം'},
+        {id:2, val:'🔺'}, {id:2, val:'ത്രികോണം'},
+        {id:3, val:'🟦'}, {id:3, val:'സമചതുരം'},
+        {id:4, val:'⭐'}, {id:4, val:'നക്ഷത്രം'},
+        {id:5, val:'⚽'}, {id:5, val:'പന്ത്'},
+        {id:6, val:'🪟'}, {id:6, val:'ജനൽ'}
+    ];
+    let flipped=[], matched=0, moves=0;
+    function initMemory() {
+        const grid = document.getElementById('memoryGrid');
+        grid.innerHTML = '';
+        flipped=[]; matched=0; moves=0;
+        document.getElementById('memoryMoves').innerText = 'നീക്കങ്ങൾ: 0';
+        let shuffled = [...memPairs].sort(()=>Math.random()-0.5);
+        shuffled.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'memory-card';
+            card.dataset.id = item.id;
+            card.innerHTML = `<div class="content">${item.val}</div>`;
+            card.onclick = () => flipCard(card);
+            grid.appendChild(card);
+        });
+    }
+    function flipCard(card) {
+        if(flipped.length<2 && !card.classList.contains('revealed') && !card.classList.contains('matched')) {
+            card.classList.add('revealed');
+            flipped.push(card);
+            if(flipped.length===2) {
+                moves++;
+                document.getElementById('memoryMoves').innerText = `നീക്കങ്ങൾ: ${moves}`;
+                setTimeout(checkMem, 600);
+            }
+        }
+    }
+    function checkMem() {
+        const [c1,c2] = flipped;
+        if(c1.dataset.id === c2.dataset.id) {
+            c1.classList.replace('revealed','matched');
+            c2.classList.replace('revealed','matched');
+            matched += 2;
+            if(matched === memPairs.length) showToast('ഗംഭീരം! എല്ലാം കണ്ടെത്തി! 🏆');
+        } else {
+            c1.classList.remove('revealed');
+            c2.classList.remove('revealed');
+        }
+        flipped = [];
+    }
+
+    // ========== MATCH ==========
+    let selL=null, selR=null;
+    function selectMatchItem(side, el) {
+        if(el.classList.contains('matched')) return;
+        document.querySelectorAll(`#match-${side} .match-item:not(.matched)`).forEach(i=>i.classList.remove('selected'));
+        el.classList.add('selected');
+        if(side==='left') selL=el; else selR=el;
+        if(selL && selR) {
+            if(selL.dataset.id === selR.dataset.id) {
+                selL.className='match-item matched';
+                selR.className='match-item matched';
+                showToast('ശരി! ✅');
+            } else {
+                showToast('തെറ്റ്!', 1000, false);
+                selL.classList.remove('selected');
+                selR.classList.remove('selected');
+            }
+            selL=null; selR=null;
+        }
+    }
+    function resetMatch() {
+        document.querySelectorAll('.match-item').forEach(el => el.className='match-item');
+        selL=null; selR=null;
+    }
+
+    // ========== COUNT SHAPES ==========
+    const countTasks = [
+        { q: 'എത്ര വൃത്തങ്ങൾ ഉണ്ട്?', shapes: ['🔴','🔺','🔴','🟦','🔴','🔺'], ans: 3 },
+        { q: 'എത്ര ത്രികോണങ്ങൾ ഉണ്ട്?', shapes: ['🔺','🔴','🔺','🔺','🟦','🔴'], ans: 3 },
+        { q: 'എത്ര സമചതുരങ്ങൾ ഉണ്ട്?', shapes: ['🟦','🔴','🟦','🔺','🟦','🟦'], ans: 4 },
+        { q: 'എത്ര വൃത്തങ്ങൾ ഉണ്ട്?', shapes: ['⚽','🔺','🔴','⚽','🟦','🔴'], ans: 4 },
+        { q: 'എത്ര ത്രികോണങ്ങൾ ഉണ്ട്?', shapes: ['🍕','🔺','🟦','🍕','🔴','🔺'], ans: 4 }
+    ];
+    let countIdx = 0;
+    function initCount() {
+        countIdx = Math.floor(Math.random() * countTasks.length);
+        const t = countTasks[countIdx];
+        document.getElementById('countQuestion').innerText = t.q;
+        const disp = document.getElementById('countDisplay');
+        disp.innerHTML = '';
+        t.shapes.forEach(s => {
+            const sp = document.createElement('span');
+            sp.className = 'text-4xl';
+            sp.innerText = s;
+            disp.appendChild(sp);
+        });
+        const opts = document.getElementById('countOptions');
+        opts.innerHTML = '';
+        [t.ans-1, t.ans, t.ans+1].sort(()=>Math.random()-0.5).forEach(n => {
+            if(n < 1) return;
+            const btn = document.createElement('button');
+            btn.className = 'quiz-opt text-2xl py-4';
+            btn.innerText = n;
+            btn.onclick = () => {
+                if(n === t.ans) {
+                    showToast('ശരി! 🎉');
+                    setTimeout(initCount, 1200);
+                } else {
+                    showToast('തെറ്റ്! വീണ്ടും എണ്ണൂ', 1500, false);
+                }
+            };
+            opts.appendChild(btn);
+        });
+    }
+
+    // ========== IDENTIFY ==========
+    const idData = [
+        {emoji:'🔴', name:'വൃത്തം', opts:['വൃത്തം','ത്രികോണം','സമചതുരം','ദീർഘചതുരം']},
+        {emoji:'🔺', name:'ത്രികോണം', opts:['സമചതുരം','ത്രികോണം','വൃത്തം','ദീർഘചതുരം']},
+        {emoji:'🟦', name:'സമചതുരം', opts:['വൃത്തം','ദീർഘചതുരം','സമചതുരം','ത്രികോണം']},
+        {emoji:'▬', name:'ദീർഘചതുരം', opts:['ത്രികോണം','വൃത്തം','സമചതുരം','ദീർഘചതുരം']},
+        {emoji:'⚽', name:'വൃത്തം', opts:['ത്രികോണം','വൃത്തം','സമചതുരം','ദീർഘചതുരം']},
+        {emoji:'🪟', name:'സമചതുരം', opts:['വൃത്തം','ത്രികോണം','സമചതുരം','ദീർഘചതുരം']},
+        {emoji:'🍕', name:'ത്രികോണം', opts:['സമചതുരം','വൃത്തം','ത്രികോണം','ദീർഘചതുരം']},
+        {emoji:'📖', name:'ദീർഘചതുരം', opts:['വൃത്തം','ത്രികോണം','സമചതുരം','ദീർഘചതുരം']},
+        {emoji:'🫓', name:'വൃത്തം', opts:['ത്രികോണം','വൃത്തം','സമചതുരം','ദീർഘചതുരം']}
+    ];
+    let idIdx=0;
+    function initIdentify() {
+        idIdx=0;
+        loadIdentify();
+    }
+    function loadIdentify() {
+        if(idIdx >= idData.length) idIdx=0;
+        const item = idData[idIdx];
+        document.getElementById('idProgress').innerText = `${idIdx+1} / ${idData.length}`;
+        document.getElementById('idShapeDisplay').innerText = item.emoji;
+        const opts = document.getElementById('idOptions');
+        opts.innerHTML = '';
+        let shuffled = [...item.opts].sort(()=>Math.random()-0.5);
+        shuffled.forEach(o => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-opt py-4 text-lg';
+            btn.innerText = o;
+            btn.onclick = () => {
+                if(o === item.name) {
+                    btn.classList.add('bg-green-200','border-green-500');
+                    showToast('ശരി! 🎉');
+                    idIdx++;
+                    setTimeout(loadIdentify, 900);
+                } else {
+                    btn.classList.add('bg-red-200','border-red-500');
+                    showToast('തെറ്റ്!', 1200, false);
+                    setTimeout(()=>btn.classList.remove('bg-red-200','border-red-500'),700);
+                }
+            };
+            opts.appendChild(btn);
+        });
+    }
+
+    // ========== SORT ==========
+    let sortSelected = null;
+    function initSort() {
+        sortSelected = null;
+        document.getElementById('sortHint').innerText = 'ഒരു ആകൃതി തിരഞ്ഞെടുക്കൂ';
+        document.getElementById('bin-circle').innerHTML = '';
+        document.getElementById('bin-triangle').innerHTML = '';
+        document.getElementById('bin-square').innerHTML = '';
+        const items = document.getElementById('sortItems');
+        items.innerHTML = `
+            <button class="text-4xl p-2 bg-white border-2 border-gray-300 rounded-xl" data-shape="circle" onclick="sortPick(this)">🔴</button>
+            <button class="text-4xl p-2 bg-white border-2 border-gray-300 rounded-xl" data-shape="triangle" onclick="sortPick(this)">🔺</button>
+            <button class="text-4xl p-2 bg-white border-2 border-gray-300 rounded-xl" data-shape="square" onclick="sortPick(this)">🟦</button>
+            <button class="text-4xl p-2 bg-white border-2 border-gray-300 rounded-xl" data-shape="circle" onclick="sortPick(this)">⚽</button>
+            <button class="text-4xl p-2 bg-white border-2 border-gray-300 rounded-xl" data-shape="triangle" onclick="sortPick(this)">🍕</button>
+            <button class="text-4xl p-2 bg-white border-2 border-gray-300 rounded-xl" data-shape="square" onclick="sortPick(this)">🪟</button>
+        `;
+    }
+    function sortPick(el) {
+        document.querySelectorAll('#sortItems button').forEach(b => b.classList.remove('ring-4','ring-amber-400'));
+        el.classList.add('ring-4','ring-amber-400');
+        sortSelected = el;
+        document.getElementById('sortHint').innerText = 'ഇപ്പോൾ ശരിയായ ബോക്സിൽ ക്ലിക്ക് ചെയ്യൂ';
+    }
+    function sortDrop(bin) {
+        if(!sortSelected) {
+            showToast('ആദ്യം ഒരു ആകൃതി തിരഞ്ഞെടുക്കൂ', 1500, false);
+            return;
+        }
+        if(sortSelected.dataset.shape === bin) {
+            const span = document.createElement('span');
+            span.className = 'text-2xl';
+            span.innerText = sortSelected.innerText;
+            document.getElementById('bin-' + bin).appendChild(span);
+            sortSelected.remove();
+            sortSelected = null;
+            document.getElementById('sortHint').innerText = 'ശരി! അടുത്തത് തിരഞ്ഞെടുക്കൂ';
+            showToast('ശരി! ✅');
+            if(document.getElementById('sortItems').children.length === 0) {
+                showToast('എല്ലാം തരംതിരിച്ചു! 🏆');
+            }
+        } else {
+            showToast('തെറ്റായ ബോക്സ്!', 1200, false);
+        }
+    }
+
+    // ========== QUIZ ==========
+    const quizData = [
+        {q:'വൃത്തത്തിന് എത്ര വശങ്ങളുണ്ട്?', opts:['0','3','4','1'], ans:0},
+        {q:'ത്രികോണത്തിന് എത്ര മൂലകളുണ്ട്?', opts:['2','3','4','0'], ans:1},
+        {q:'പന്തിന്റെ ആകൃതി എന്ത്?', opts:['ത്രികോണം','സമചതുരം','വൃത്തം','ദീർഘചതുരം'], ans:2},
+        {q:'സമചതുരത്തിന്റെ എല്ലാ വശങ്ങളും ______ ആണ്.', opts:['വ്യത്യസ്തം','തുല്യം','വൃത്തം','നീളം'], ans:1},
+        {q:'ജനലിന്റെ ആകൃതി സാധാരണയായി?', opts:['വൃത്തം','ത്രികോണം','സമചതുരം / ദീർഘചതുരം','നക്ഷത്രം'], ans:2},
+        {q:'പിസ്സ സ്ലൈസിന്റെ ആകൃതി?', opts:['വൃത്തം','ത്രികോണം','സമചതുരം','ദീർഘചതുരം'], ans:1},
+        {q:'ദോശയുടെ ആകൃതി?', opts:['ത്രികോണം','സമചതുരം','വൃത്തം','ദീർഘചതുരം'], ans:2},
+        {q:'പുസ്തകത്തിന്റെ ആകൃതി?', opts:['വൃത്തം','ത്രികോണം','സമചതുരം','ദീർഘചതുരം'], ans:3}
+    ];
+    let qIdx=0, qScore=0;
+    function initQuiz() {
+        qIdx=0; qScore=0;
+        document.getElementById('quizResultArea').style.display='none';
+        document.getElementById('quizQuestionArea').style.display='block';
+        loadQ();
+    }
+    function loadQ() {
+        document.getElementById('quizProgress').innerText = `ചോദ്യം ${qIdx+1} / ${quizData.length}`;
+        const qd = quizData[qIdx];
+        document.getElementById('questionText').innerText = `${qIdx+1}. ${qd.q}`;
+        const og = document.getElementById('optionsGrid');
+        og.innerHTML = '';
+        qd.opts.forEach((o,i) => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-opt py-4 text-lg';
+            btn.innerText = o;
+            btn.onclick = () => checkQ(i, btn);
+            og.appendChild(btn);
+        });
+    }
+    function checkQ(sIdx, btn) {
+        const cIdx = quizData[qIdx].ans;
+        document.querySelectorAll('#optionsGrid .quiz-opt').forEach(b => b.disabled=true);
+        if(sIdx === cIdx) {
+            btn.classList.add('bg-green-100','border-green-500');
+            qScore++;
+            showToast('ശരി! 🎉',700);
+        } else {
+            btn.classList.add('bg-red-100','border-red-500');
+            document.querySelectorAll('#optionsGrid .quiz-opt')[cIdx].classList.add('bg-green-100','border-green-500');
+            showToast('തെറ്റ്!',700,false);
+        }
+        setTimeout(()=>{
+            qIdx++;
+            if(qIdx < quizData.length) loadQ();
+            else {
+                document.getElementById('quizQuestionArea').style.display='none';
+                document.getElementById('quizResultArea').style.display='block';
+                document.getElementById('finalScore').innerText = qScore;
+            }
+        },1100);
+    }
+
+    // ========== MODEL ANSWERS TOGGLE ==========
+    function toggleModelAnswers() {
+        document.getElementById('modelAnswers').classList.toggle('show');
+    }
+
+    // ========== PDF ==========
+    function downloadPDF() {
+        const el = document.getElementById('printableQP');
+        html2pdf().set({
+            margin:12,
+            filename:'Std1_Maths_Varamelam_UnitTest.pdf',
+            html2canvas:{scale:2},
+            jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+        }).from(el).save();
+    }
+    function downloadLessonPDF() {
+        const el = document.getElementById('printableLessonQP');
+        html2pdf().set({
+            margin:12,
+            filename:'Std1_Maths_Varamelam_LessonTest.pdf',
+            html2canvas:{scale:2},
+            jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+        }).from(el).save();
+    }
+
+    // Init some on load
+    initPattern();
+    initBeads();
+</script>
+</body>
+</html>
