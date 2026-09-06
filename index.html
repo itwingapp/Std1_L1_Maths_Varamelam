@@ -459,6 +459,20 @@
                     <p class="ml-4 mt-2">( ത്രികോണം / വൃത്തം / സമചതുരം )</p>
                 </div>
             </div>
+            <button class="btn-action no-print mt-6" id="toggleAnswersBtn" onclick="toggleModelAnswers()">📝 ഉത്തരങ്ങൾ കാണുക / മറയ്ക്കുക</button>
+            <div id="modelAnswers" class="mt-4 p-4 bg-amber-50 border-2 border-amber-300 rounded-xl text-lg hidden no-print">
+                <p class="font-bold text-amber-800 mb-3 text-center">✅ മോഡൽ ഉത്തരങ്ങൾ</p>
+                <ol class="list-decimal list-inside space-y-2 font-bold text-gray-800">
+                    <li>വൃത്തം</li>
+                    <li>🔺</li>
+                    <li>ചതുരം</li>
+                    <li>ത്രികോണം</li>
+                    <li>ത്രികോണം</li>
+                    <li>പ്ലേറ്റ്</li>
+                    <li>0</li>
+                    <li>സമചതുരം</li>
+                </ol>
+            </div>
             <button class="bg-gray-800 text-white p-3 rounded mt-8 w-full font-bold no-print" onclick="window.print()">🖨️ പ്രിന്റ് ചെയ്യുക</button>
         </div>
     </div>
@@ -514,7 +528,7 @@
                     </ul>
                 </div>
             </div>
-            <button class="bg-gray-800 text-white p-3 rounded mt-8 w-full font-bold no-print" onclick="window.print()">🖨️ പ്രിന്റ് ചെയ്യുക</button>
+            <button class="bg-green-700 text-white p-3 rounded mt-8 w-full font-bold no-print" onclick="window.print()">📥 PDF ആയി ഡൗൺലോഡ് ചെയ്യുക</button>
         </div>
     </div>
 
@@ -534,6 +548,13 @@
         document.getElementById(id).classList.add('active');
         window.scrollTo(0, 0);
         window.speechSynthesis.cancel(); // stop reading when changing screens
+    }
+
+    function toggleModelAnswers() {
+        const ans = document.getElementById('modelAnswers');
+        if (ans) {
+            ans.classList.toggle('hidden');
+        }
     }
 
     // Zoom
